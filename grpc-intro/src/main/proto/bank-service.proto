@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.mlorenzo.models";
+
+message BalanceCheckRequest {
+  int32 account_number = 1;
+}
+
+message Balance {
+  // USD
+  int32 amount = 1;
+}
+
+message WithdrawRequest {
+  int32 account_number = 1;
+  int32 amount = 2;
+}
+
+message Money {
+  int32 value = 1;
+}
+
+message DepositRequest {
+  int32 account_number = 1;
+  int32 amount = 2;
+}
+
+// Se generará una clase abstracta con estos métodos sin implementar
+service BankService {
+  // Unary -> Una petición - Una respuesta
+  rpc getBalance(BalanceCheckRequest) returns (Balance);
+  // Server-side streaming -> Una petición - Una o muchas respuestas
+  rpc withdraw(WithdrawRequest) returns (stream Money);
+  // Client-side streaming -> Una o muchas peticiones - Una respuesta
+  rpc cashDeposit(stream DepositRequest) returns (Balance);
+}

@@ -1,0 +1,14 @@
+// Usamos la sintaxís de la versión 3 de Proto
+syntax = "proto3";
+
+// Importamos un archivo Proto
+import "common/car.proto";
+
+option java_multiple_files = true;
+// Paquete donde se generarán las clases Java
+option java_package = "com.mlorenzo.models";
+
+message Dealer {
+  // Nota: Indicamos que el tipo Car está en el paquete "common"
+  map<int32, common.Car> model = 1;
+}

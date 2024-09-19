@@ -1,0 +1,26 @@
+// Usamos la sintaxís de la versión 3 de Proto
+syntax = "proto3";
+
+// Paquete de archivos Proto
+package common;
+
+option java_multiple_files = true;
+// Paquete donde se generarán las clases Java
+option java_package = "com.mlorenzo.models";
+
+message Car {
+  string make = 1;
+  string model = 2;
+  int32 year = 3;
+  // Nota: En Proto se suele usar snake-case para los nombres compuestos de campos
+  BodyStyle body_style = 4;
+}
+
+enum BodyStyle {
+  // Nota: Si no se establece ninguna opción, por defecto se usa la opción con valor 0(En este caso, "UNKNOWN")
+  UNKNOWN = 0;
+  SEDAN = 1;
+  COUPE = 2;
+  SUV = 3;
+}
+

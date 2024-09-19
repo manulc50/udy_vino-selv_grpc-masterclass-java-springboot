@@ -1,0 +1,11 @@
+version: "3"
+
+# Nota: Usamos un servidor Nginx como un servidor Proxy para probar el balanceo de carga entre varios servidores gRPC
+
+services:
+  nginx:
+    image: nginx:1.15-alpine
+    volumes:
+      - ./conf:/etc/nginx/conf.d
+    ports:
+      - "8585:8585"

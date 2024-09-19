@@ -1,0 +1,53 @@
+// Usamos la sintaxís de la versión 3 de Proto
+syntax = "proto3";
+
+option java_multiple_files = true;
+// Paquete donde se generarán las clases Java
+option java_package = "com.mlorenzo.models";
+
+// Versioning
+
+// v1
+/*message Television {
+  string brand = 1;
+  int32 year = 2;
+}*/
+
+// v2 - Renombramos el campor "year" por "model" y añadimos el campo "type"
+// Este tipo de cambios no afectan a los clientes que utilicen versiones antiguas del tipo de mensaje
+/*message Television {
+  string brand = 1;
+  int32 model = 2;
+  TvType type = 3;
+}*/
+
+// v3
+/*message Television {
+  string brand = 1;
+  TvType type = 3;
+}*/
+
+// v4
+/*message Television {
+  string brand = 1;
+  int32 price = 2;
+  TvType type = 3;
+}*/
+
+// v5
+message Television {
+  string brand = 1;
+  reserved 2;
+  reserved "year", "model";
+  TvType type = 3;
+  // Un nuevo campo no puede estar asociado al tag 2 ni puede tener los nombres "year" y "model"
+  // porque están reservados para mantener la compatibilidad con aquellos servicios que tienen versiones
+  // antiguas de este mensjae
+  int32 price = 4;
+}
+
+enum TvType {
+  HD = 0;
+  UHD = 1;
+  OLED = 2;
+}

@@ -1,0 +1,89 @@
+// Usamos la sintaxís de la versión 3 de Proto
+syntax = "proto3";
+
+// Importamos dos archivos Proto
+import "common/address.proto";
+import "common/car.proto";
+// Al igual que ocurren en Java, en Proto existen los tipos de datos primitivos y sus wrappers
+// Pasa usar sus wrappers, tenemos que importar este archivo Proto de Google
+import "google/protobuf/wrappers.proto";
+
+/*
+  Types(Java -> Proto):
+  int -> int32
+  long -> int64
+  float -> float
+  double -> double
+  boolean -> bool
+  String -> string
+  byte[] -> bytes
+  Collection/List -> repeated
+  Map -> map
+ */
+
+/*
+  Default values in Proto:
+  int32/any number type -> 0
+  bool -> false
+  string -> empty string
+  enum -> first value(option with value 0)
+  repeated -> empty list
+  map -> wrapper/empty map
+ */
+
+/*
+  Por defecto, el valor de esta opción es false y solo se genera una clase Java con un nombre terminado
+  en "...OuterClass.java"(Por ejemplo, "PersonOuterClass.java"). Si queremos generar una clase que se llame igual
+  que el tipo de mensaje definido aquí, tenemos que establecer esta opción en true. De esta forma, se generarán 2
+  clases Java más (Por ejemplo, "Person.java", "PersonOrBuilder.java" y "PersonOuterClass.java")
+*/
+option java_multiple_files = true;
+
+/*
+  Por defecto, si no indicamos esta opción, las clases Java se generan sin ningún paquete asociado.
+  Aquí indicamos que las clases Java se generen dentro del paquete "com.mlorenzo.models"
+*/
+option java_package = "com.mlorenzo.models";
+
+// Define el mensaje de tipo "Person"
+// En Json: {"name": "Sam", "age": 12,...}
+// En Proto: 1=Sam 2=12 ... -> Cuando se serializa un objeto, Proto no utiliza los nombres de los campos como "name",
+// "age", etc. para ello. Utiliza los tags que indicamos aquí y los asocia a los valores de esos campos. Por esta razón,
+// el sevicio destino, que deserialice los datos a un objecto, también tiene que tener este archivo para poder
+// identificar cada campo del objeto a partir del tag o etiqueta correspondiente y así establecer su valor. También,
+// como en la serialización no se incluyen los nombres de los campos, el tamaño de los mensajes será menor en Proto que
+// en Json(que sí los incluye).
+// Para que el tamaño de los mensajes con Proto sea optimo y reducido, tenemos que tener cuidado con el número que
+// establecemos como tag o etiqueta. Los números 1-15 ocupan 1 byte, 16-2047 ocupan 2 bytes. Por esta razón, los campos
+// que sean más frecuentes y comunes debes usar tags o etiquetas a partir de los número 1-15, y el resto, deben usar
+// tags o etiquetas a partir de lso números 16-2047
+message Person {
+  // campo "name"
+  string name = 1; // 1 es un tag o etiqueta. Puede ser cualquier número, pero tiene que se diferente entre los campos.
+  // campo "age"
+  int32 age = 2;
+  // Nota: Cuando el tipo de dato es un tipo wrapper o un tipo personalizado como en este caso(Address),
+  // también se generará un método "has..."(En este caso, "hasAddress") que nos permite saber si está definido o no
+  // el campo
+  // Nota: Indicamos que el tipo Address está en el paquete "common"
+  common.Address address = 3;
+  // Colección
+  // Nota: Indicamos que el tipo Car está en el paquete "common"
+  repeated common.Car car = 4;
+}
+
+message PersonWithWrappers {
+  // Versión wrapper del tipo primitivo string
+  google.protobuf.StringValue name = 1;
+  // Versión wrapper del tipo primitivo int32
+  google.protobuf.Int32Value age = 2;
+  common.Address address = 3;
+  repeated common.Car car = 4;
+}
+
+// La creación de un tipo de Mensaje sin propiedades es válido en Proto
+message Void {}
+
+
+
+

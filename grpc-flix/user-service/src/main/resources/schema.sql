@@ -1,0 +1,1 @@
+CREATE TABLE users AS SELECT * FROM CSVREAD('classpath:users.csv');

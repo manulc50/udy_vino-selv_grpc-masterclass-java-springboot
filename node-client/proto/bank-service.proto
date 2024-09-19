@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.mlorenzo.models";
+
+message BalanceCheckRequest {
+  int32 account_number = 1;
+}
+
+message Balance {
+  // USD
+  int32 amount = 1;
+}
+
+service BankService {
+  // Unary -> Una petición - Una respuesta
+  rpc getBalance(BalanceCheckRequest) returns (Balance);
+}

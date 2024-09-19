@@ -1,0 +1,16 @@
+grpc:
+  client:
+    # Configuramos un cliente gRPC con id "user-service"(se lo establecemos nosotros)
+    user-service:
+      # Indicamos donde se encuentra el servidor gRPC
+      address: static://localhost:6565
+      # Indicamos que la comunicación sea sin seguridad, es decir, texto plano sin encriptar
+      negotiationType: plaintext
+    movie-service:
+      address: static://localhost:7575
+      negotiationType: plaintext
+      # Ejemplo para realizar la conexión con un servidor gRPC que tiene habilitado SSL/TLS
+      #negotiationType: TLS
+        #security:
+          #trustCertCollection: file:/ssl-tls/ca.cert.pem
+
